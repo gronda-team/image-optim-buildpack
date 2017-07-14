@@ -6,13 +6,13 @@ CACHE_DIR=$2
 BIN_DIR=$(cd $(dirname $0); pwd)
 ROOT_DIR=$(dirname $BIN_DIR)
 WORKING_DIR=$(pwd)
-VENDOR_DIR="vendor/image-optim"
+VENDOR_DIR="vendor/optimizers"
 
 indent() {
   sed -u 's/^/       /'
 }
 
-echo "-----> Adding Item-Optim binaries"
+echo "-----> Adding optimizer binaries"
 
 cd $ROOT_DIR/${VENDOR_DIR}
 
@@ -29,11 +29,11 @@ else
 fi
 
 
-export PATH="$PATH:$HOME/vendor/image-optim"
+export PATH="$PATH:$HOME/vendor/optimizers"
 
 cd $WORKING_DIR
 
-echo "-----> Adding image-optim binaries symlink to make them available in next buildpacks"
+echo "-----> Adding image optimizers binaries symlink to make them available in next buildpacks"
 
 cd /tmp/codon/vendor/bin
 
@@ -43,8 +43,9 @@ ln -s ${BUILD_DIR}/${VENDOR_DIR}/jpegoptim jpegoptim
 ln -s ${BUILD_DIR}/${VENDOR_DIR}/jpegtran jpegtran
 ln -s ${BUILD_DIR}/${VENDOR_DIR}/optipng optipng
 ln -s ${BUILD_DIR}/${VENDOR_DIR}/pngcrush pngcrush
+ln -s ${BUILD_DIR}/${VENDOR_DIR}/pngquant pngquant
 
-echo "-----> Adding image-optim binaries to PATH"
+echo "-----> Adding image optimizers binaries to PATH"
 
 cd $ROOT_DIR/profile.d
 
@@ -52,17 +53,9 @@ mkdir -p ${BUILD_DIR}/.profile.d
 
 cp -v * ${BUILD_DIR}/.profile.d/ | indent
 
-if [ -f ${BUILD_DIR}/Gemfile ]; then
-    echo "-----> Gemfile detected, adding image-optim config file"
-
-    cd ${ROOT_DIR}/config
-
-    cp -v image_optim.yml ${BUILD_DIR}/.image_optim.yml
-fi
-
 cd $WORKING_DIR
 
-echo "-----> Image-Optim binaries version"
+echo "-----> Image optimizers binaries version"
 
 advpng -V | head -1 | indent
 
@@ -76,5 +69,6 @@ optipng -V | head -1 | indent
 
 pngcrush -V | sed -n 2p | indent
 
-cd $WORKING_DIR
+pngquant -V | head -1 | indent
 
+cd $WORKING_DIR
