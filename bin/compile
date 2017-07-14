@@ -14,6 +14,7 @@ indent() {
 
 echo "-----> Adding optimizer binaries"
 
+chmod -R +x $ROOT_DIR/${VENDOR_DIR}
 cd $ROOT_DIR/${VENDOR_DIR}
 
 mkdir -p ${BUILD_DIR}/${VENDOR_DIR}
